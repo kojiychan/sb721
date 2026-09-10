@@ -13,7 +13,7 @@ export default function ForgotPasswordPage() {
   function onSubmit(formData: FormData) {
     startTransition(async () => {
       if (!isSupabaseConfigured()) {
-        setMessage("Supabase is not configured yet. Add your project URL and anon key to .env.local, then restart the dev server.");
+        setMessage("Supabase is not configured yet. Add your project URL and anon/publishable key to the environment, then restart or redeploy.");
         return;
       }
       const supabase = createClientBrowser();

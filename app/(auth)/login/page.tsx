@@ -17,7 +17,7 @@ export default function LoginPage() {
     startTransition(async () => {
       setError("");
       if (!isSupabaseConfigured()) {
-        setError("Supabase is not configured yet. Add your project URL and anon key to .env.local, then restart the dev server.");
+        setError("Supabase is not configured yet. Add your project URL and anon/publishable key to the environment, then restart or redeploy.");
         return;
       }
       const supabase = createClientBrowser();
