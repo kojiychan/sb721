@@ -35,7 +35,7 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthFrame title="Agent Login" subtitle="Access your inspection orders and reports." cta="signup">
+    <AuthFrame title="Agent Login" subtitle="Access your inspection orders and reports.">
       <form action={onSubmit} className="space-y-4">
         <Field label="Email" name="email" required type="email" />
         <Field label="Password" name="password" required type="password" />
@@ -59,23 +59,21 @@ export default function LoginPage() {
 function AuthFrame({
   title,
   subtitle,
-  cta = "login",
   children,
 }: {
   title: string;
   subtitle: string;
-  cta?: "login" | "signup";
   children: React.ReactNode;
 }) {
   return (
     <div className="min-h-screen bg-paper">
-      <PublicHeader cta={cta} />
+      <PublicHeader />
       <main className="flex min-h-[calc(100vh-73px)] items-center justify-center px-4 py-10">
         <section className="w-full max-w-md rounded-lg border border-line bg-white p-6 shadow-soft">
-        <h1 className="text-2xl font-bold text-navy">{title}</h1>
-        <p className="mt-2 text-sm text-slate-600">{subtitle}</p>
-        <div className="mt-6">{children}</div>
-      </section>
+          <h1 className="text-2xl font-bold text-navy">{title}</h1>
+          <p className="mt-2 text-sm text-slate-600">{subtitle}</p>
+          <div className="mt-6">{children}</div>
+        </section>
       </main>
     </div>
   );

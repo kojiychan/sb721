@@ -1,6 +1,7 @@
 import { ClipboardList, FilePlus2, Home, LogOut, UserRound } from "lucide-react";
 import Link from "next/link";
 import { signOutAction } from "@/lib/actions";
+import { BRAND } from "@/lib/brand";
 import type { Profile } from "@/lib/types";
 
 const navItems = [
@@ -21,7 +22,7 @@ export function PortalShell({
     <div className="min-h-screen bg-paper">
       <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-line bg-white px-4 py-5 lg:block">
         <Link className="text-lg font-bold text-navy" href="/dashboard">
-          EEE Inspection Portal
+          {BRAND.companyName}
         </Link>
         <nav className="mt-8 space-y-1">
           {navItems.map((item) => (
@@ -46,7 +47,7 @@ export function PortalShell({
         <header className="sticky top-0 z-20 border-b border-line bg-white/95 px-4 py-3 backdrop-blur lg:px-8">
           <div className="flex items-center justify-between gap-4">
             <Link className="font-bold text-navy lg:hidden" href="/dashboard">
-              EEE Portal
+              {BRAND.shortName} Portal
             </Link>
             <div className="hidden gap-2 lg:flex">
               {profile.role === "admin" ? (

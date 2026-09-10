@@ -26,6 +26,7 @@ export async function createOrderAction(
   _previousState: ActionState = defaultState,
   formData: FormData,
 ): Promise<ActionState> {
+  void _previousState;
   const { supabase, profile } = await requireUser();
   const missing = requireFields(formData, [
     "property_address",

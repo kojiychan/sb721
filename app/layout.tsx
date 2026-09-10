@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "@/app/globals.css";
+import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "SB 721 & SB 326 Inspection Portal",
-  description: "Inspection order management for California EEE compliance.",
+  title: BRAND.companyName,
+  description: "California inspection management services with online order tracking.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

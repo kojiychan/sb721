@@ -1,6 +1,7 @@
 import { ClipboardList, Home, LogOut, UsersRound } from "lucide-react";
 import Link from "next/link";
 import { signOutAction } from "@/lib/actions";
+import { BRAND } from "@/lib/brand";
 import type { Profile } from "@/lib/types";
 
 const adminNav = [
@@ -20,7 +21,7 @@ export function AdminShell({
     <div className="min-h-screen bg-paper">
       <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-line bg-white px-4 py-5 lg:block">
         <Link className="text-lg font-bold text-navy" href="/admin">
-          EEE Admin
+          {BRAND.shortName} Admin
         </Link>
         <nav className="mt-8 space-y-1">
           {adminNav.map((item) => (
@@ -51,7 +52,7 @@ export function AdminShell({
         <header className="sticky top-0 z-20 border-b border-line bg-white/95 px-4 py-3 backdrop-blur lg:px-8">
           <div className="flex items-center justify-between">
             <Link className="font-bold text-navy lg:hidden" href="/admin">
-              EEE Admin
+              {BRAND.shortName} Admin
             </Link>
             <div className="text-sm text-slate-600">Admin: {profile.first_name}</div>
           </div>
