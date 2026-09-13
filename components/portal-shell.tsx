@@ -1,13 +1,19 @@
-import { ClipboardList, FilePlus2, Home, LogOut, UserRound } from "lucide-react";
+import { ClipboardList, FilePlus2, Home, Inbox, LogOut, UserRound } from "lucide-react";
 import Link from "next/link";
 import { signOutAction } from "@/lib/actions";
 import { BRAND } from "@/lib/brand";
 import type { Profile } from "@/lib/types";
 
-const navItems = [
+const agentNavItems = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/orders/new", label: "New Order", icon: FilePlus2 },
   { href: "/orders", label: "My Orders", icon: ClipboardList },
+  { href: "/account", label: "Account", icon: UserRound },
+];
+
+const inspectorNavItems = [
+  { href: "/open-orders", label: "Open Orders", icon: Inbox },
+  { href: "/my-orders", label: "My Orders", icon: ClipboardList },
   { href: "/account", label: "Account", icon: UserRound },
 ];
 
@@ -18,10 +24,13 @@ export function PortalShell({
   profile: Profile;
   children: React.ReactNode;
 }) {
+  const navItems = profile.role === "inspector" ? inspectorNavItems : agentNavItems;
+  const portalHome = profile.role === "inspector" ? "/open-orders" : "/dashboard";
+
   return (
     <div className="min-h-screen bg-paper">
       <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-line bg-white px-4 py-5 lg:block">
-        <Link className="text-lg font-bold text-navy" href="/dashboard">
+        <Link className="text-lg font-bold text-navy" href={portalHome}>
           {BRAND.companyName}
         </Link>
         <nav className="mt-8 space-y-1">
@@ -46,7 +55,7 @@ export function PortalShell({
       <div className="lg:pl-64">
         <header className="sticky top-0 z-20 border-b border-line bg-white/95 px-4 py-3 backdrop-blur lg:px-8">
           <div className="flex items-center justify-between gap-4">
-            <Link className="font-bold text-navy lg:hidden" href="/dashboard">
+            <Link className="font-bold text-navy lg:hidden" href={portalHome}>
               {BRAND.shortName} Portal
             </Link>
             <div className="hidden gap-2 lg:flex">

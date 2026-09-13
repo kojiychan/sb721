@@ -5,6 +5,15 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const host = request.headers.get("host") ?? "";
+  const isAdminHost = host.split(":")[0].startsWith("admin.");
+  const pathname = request.nextUrl.pathname;
+
+  if (isAdminHost && !pathname.startsWith("/admin") && !pathname.startsWith("/auth")) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname === "/" ? "/admin" : `/admin${pathname}`;
+    return NextResponse.rewrite(url);
+  }
 
   if (!supabaseUrl || !supabaseAnonKey) {
     return NextResponse.next({ request });

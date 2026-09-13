@@ -4,9 +4,11 @@ import {
   CalendarCheck,
   CheckCircle2,
   ClipboardList,
+  CircleDollarSign,
   FileText,
   Home,
   Landmark,
+  SearchCheck,
   Mail,
   MapPin,
   Phone,
@@ -87,9 +89,13 @@ export default function LandingPage() {
                 For Real Estate Agents • Property Owners • Property Managers • HOAs
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href={PUBLIC_ROUTES.signup}>Order an Inspection</ButtonLink>
+                <ButtonLink href={PUBLIC_ROUTES.login}>Order an Inspection</ButtonLink>
                 <ButtonLink href={PUBLIC_ROUTES.login} variant="secondary">
                   Agent Login
+                </ButtonLink>
+                <ButtonLink href={PUBLIC_ROUTES.inspectors} variant="ghost">
+                  <SearchCheck className="h-4 w-4" />
+                  Inspector Access
                 </ButtonLink>
               </div>
             </div>
@@ -160,6 +166,44 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <section className="bg-white" id="pricing">
+          <div className="mx-auto grid max-w-6xl gap-8 px-4 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+            <div>
+              <SectionLabel label="Pricing" />
+              <h2 className="mt-3 max-w-2xl text-3xl font-bold text-navy">
+                Clear Pricing for EEE Inspections
+              </h2>
+              <p className="mt-4 text-base leading-7 text-slate-600">
+                Pricing is based on the number of exterior elevated elements included in the
+                inspection order.
+              </p>
+            </div>
+            <div className="rounded-lg border border-line bg-white p-6 shadow-soft">
+              <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-blue-50 text-brand">
+                  <CircleDollarSign className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold uppercase tracking-wide text-slate-500">
+                    Starting Price
+                  </p>
+                  <p className="mt-2 text-4xl font-bold text-navy">$1,095</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    Includes four or fewer EEEs.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-6 border-t border-line pt-6">
+                <PricingRow label="Base inspection" value="$1,095 for up to 4 EEEs" />
+                <PricingRow label="Additional EEEs" value="$200 per additional EEE" />
+              </div>
+              <div className="mt-6">
+                <ButtonLink href={PUBLIC_ROUTES.login}>Order an Inspection</ButtonLink>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="bg-white">
           <div className="mx-auto max-w-6xl px-4 py-16">
             <SectionLabel label="Why Choose Us" />
@@ -192,6 +236,9 @@ export default function LandingPage() {
                 <ButtonLink href={PUBLIC_ROUTES.login}>Agent Login</ButtonLink>
                 <ButtonLink href={PUBLIC_ROUTES.signup} variant="secondary">
                   Create Account
+                </ButtonLink>
+                <ButtonLink href={PUBLIC_ROUTES.inspectors} variant="ghost">
+                  Inspector Access
                 </ButtonLink>
               </div>
             </div>
@@ -235,9 +282,12 @@ export default function LandingPage() {
               report delivery.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href={PUBLIC_ROUTES.signup}>Order an Inspection</ButtonLink>
+              <ButtonLink href={PUBLIC_ROUTES.login}>Order an Inspection</ButtonLink>
               <ButtonLink href={PUBLIC_ROUTES.login} variant="secondary">
                 Agent Login
+              </ButtonLink>
+              <ButtonLink href={PUBLIC_ROUTES.inspectors} variant="secondary">
+                Inspector Access
               </ButtonLink>
             </div>
           </div>
@@ -301,9 +351,18 @@ function ServiceCard({
         <ButtonLink href={href} variant="secondary">
           {learnLabel}
         </ButtonLink>
-        <ButtonLink href={PUBLIC_ROUTES.signup}>Order Inspection</ButtonLink>
+        <ButtonLink href={PUBLIC_ROUTES.login}>Order Inspection</ButtonLink>
       </div>
     </article>
+  );
+}
+
+function PricingRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="grid grid-cols-[1fr_auto] gap-4 border-b border-line py-4 last:border-b-0 last:pb-0 first:pt-0">
+      <span className="text-sm font-medium text-slate-600">{label}</span>
+      <span className="text-right text-sm font-semibold text-navy">{value}</span>
+    </div>
   );
 }
 

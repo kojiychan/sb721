@@ -38,6 +38,13 @@ export default async function AdminAgentsPage() {
                 <td className="px-4 py-3 text-slate-700">{agent.company ?? "—"}</td>
               </tr>
             ))}
+            {agents.length === 0 ? (
+              <tr>
+                <td className="px-4 py-8 text-center text-slate-500" colSpan={4}>
+                  No agent accounts yet.
+                </td>
+              </tr>
+            ) : null}
           </tbody>
         </table>
       </div>

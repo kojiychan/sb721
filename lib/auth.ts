@@ -34,7 +34,18 @@ export async function requireUser() {
 }
 
 export async function requireAdmin() {
-  const context = await requireUser();
+  const context = await getCurrentProfile();
+  if (!context.user || !context.profile) redirect("/login?next=/admin");
   if (context.profile.role !== "admin") redirect("/dashboard");
+  return context as typeof context & {
+    supabase: NonNullable<typeof context.supabase>;
+    user: NonNullable<typeof context.user>;
+    profile: Profile;
+  };
+}
+
+export async function requireInspector() {
+  const context = await requireUser();
+  if (context.profile.role !== "inspector") redirect("/dashboard");
   return context;
 }

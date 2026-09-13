@@ -1,4 +1,5 @@
 import { Plus } from "lucide-react";
+import { redirect } from "next/navigation";
 import { ButtonLink } from "@/components/button";
 import { EmptyState } from "@/components/empty-state";
 import { OrdersTable } from "@/components/orders-table";
@@ -11,6 +12,8 @@ export default async function DashboardPage({
   searchParams: Promise<{ tab?: string; q?: string }>;
 }) {
   const { supabase, profile } = await requireUser();
+  if (profile.role === "inspector") redirect("/open-orders");
+
   const params = await searchParams;
   const tab = params.tab === "completed" ? "completed" : params.tab === "all" ? "all" : "active";
   const orders = await getAgentOrders(supabase, profile.id, tab);

@@ -3,7 +3,7 @@ values
   ('00000000-0000-0000-0000-000000000001', 'Avery', 'Morgan', 'avery@example.com', '(555) 100-1001', 'Harbor Realty', 'agent'),
   ('00000000-0000-0000-0000-000000000002', 'Jordan', 'Lee', 'jordan@example.com', '(555) 100-1002', 'Pacific HOA Group', 'agent'),
   ('00000000-0000-0000-0000-000000000003', 'Taylor', 'Reed', 'taylor@example.com', '(555) 100-1003', 'Summit Brokerage', 'agent'),
-  ('00000000-0000-0000-0000-000000000010', 'Admin', 'User', 'admin@example.com', '(555) 100-1010', 'EEE Inspection Management', 'admin')
+  ('00000000-0000-0000-0000-000000000010', 'Kojiy', 'Chan', 'kojiychan@example.com', '(555) 100-1010', 'EEE Inspection Management', 'admin')
 on conflict (id) do nothing;
 
 insert into public.orders (

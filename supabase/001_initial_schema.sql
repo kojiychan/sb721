@@ -7,7 +7,7 @@ create table if not exists public.profiles (
   email text not null,
   phone text,
   company text,
-  role text not null default 'agent' check (role in ('agent', 'admin')),
+  role text not null default 'agent' check (role in ('agent', 'inspector', 'admin')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -16,6 +16,7 @@ create table if not exists public.orders (
   id uuid primary key default gen_random_uuid(),
   order_number text unique not null,
   agent_id uuid not null references public.profiles(id) on delete cascade,
+  inspector_id uuid references public.profiles(id) on delete set null,
   property_address text not null,
   city text not null,
   state text not null,
@@ -112,7 +113,11 @@ begin
     coalesce(new.email, ''),
     nullif(new.raw_user_meta_data->>'phone', ''),
     nullif(new.raw_user_meta_data->>'company', ''),
-    case when new.raw_user_meta_data->>'role' = 'admin' then 'admin' else 'agent' end
+    case
+      when new.raw_user_meta_data->>'role' = 'admin' then 'admin'
+      when new.raw_user_meta_data->>'role' = 'inspector' then 'inspector'
+      else 'agent'
+    end
   )
   on conflict (id) do nothing;
   return new;
@@ -169,10 +174,33 @@ create policy "Agents can read own orders"
 on public.orders for select
 using (agent_id = auth.uid() or public.is_admin());
 
+create policy "Inspectors can read open and assigned orders"
+on public.orders for select
+using (
+  public.is_admin()
+  or (
+    exists (
+      select 1 from public.profiles
+      where id = auth.uid() and role = 'inspector'
+    )
+    and (
+      inspector_id = auth.uid()
+      or (
+        inspector_id is null
+        and inspector_name is null
+        and inspector_email is null
+        and inspector_phone is null
+        and status not in ('Completed', 'Cancelled')
+      )
+    )
+  )
+);
+
 create policy "Agents can create own orders"
 on public.orders for insert
 with check (
   agent_id = auth.uid()
+  and inspector_id is null
   and status = 'Order Received'
   and inspection_date is null
   and inspector_name is null

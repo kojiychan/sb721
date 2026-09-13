@@ -1,4 +1,4 @@
-import { ClipboardList, Home, LogOut, UsersRound } from "lucide-react";
+import { ClipboardList, HardHat, Home, LogOut, UsersRound } from "lucide-react";
 import Link from "next/link";
 import { signOutAction } from "@/lib/actions";
 import { BRAND } from "@/lib/brand";
@@ -7,7 +7,9 @@ import type { Profile } from "@/lib/types";
 const adminNav = [
   { href: "/admin", label: "Dashboard", icon: Home },
   { href: "/admin/orders", label: "Orders", icon: ClipboardList },
+  { href: "/admin/users", label: "Users", icon: UsersRound },
   { href: "/admin/agents", label: "Agents", icon: UsersRound },
+  { href: "/admin/inspectors", label: "Inspectors", icon: HardHat },
 ];
 
 export function AdminShell({
@@ -34,12 +36,6 @@ export function AdminShell({
               {item.label}
             </Link>
           ))}
-          <Link
-            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
-            href="/dashboard"
-          >
-            Agent View
-          </Link>
         </nav>
         <form action={signOutAction} className="absolute bottom-5 left-4 right-4">
           <button className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100">

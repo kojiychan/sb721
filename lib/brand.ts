@@ -15,6 +15,9 @@ export const PUBLIC_ROUTES = {
   contact: "/#contact",
   login: "/login",
   signup: "/signup",
+  inspectors: "/inspectors",
+  inspectorLogin: "/login?role=inspector",
+  inspectorSignup: "/signup?role=inspector",
   privacy: "/privacy",
   terms: "/terms",
 };

@@ -10,10 +10,21 @@ const navItems = [
   { href: PUBLIC_ROUTES.sb721, label: "SB 721" },
   { href: PUBLIC_ROUTES.sb326, label: "SB 326" },
   { href: PUBLIC_ROUTES.howItWorks, label: "How It Works" },
+  { href: PUBLIC_ROUTES.inspectors, label: "Inspectors" },
   { href: PUBLIC_ROUTES.contact, label: "Contact" },
 ];
 
-export function PublicHeader({ cta = "order" }: { cta?: "login" | "order" }) {
+export function PublicHeader({
+  cta = "order",
+  loginHref = PUBLIC_ROUTES.login,
+  loginLabel = "Agent Login",
+  orderHref = PUBLIC_ROUTES.login,
+}: {
+  cta?: "login" | "order";
+  loginHref?: string;
+  loginLabel?: string;
+  orderHref?: string;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -33,11 +44,11 @@ export function PublicHeader({ cta = "order" }: { cta?: "login" | "order" }) {
           ))}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
-          <Link className="text-sm font-semibold text-slate-700 hover:text-navy" href={PUBLIC_ROUTES.login}>
-            Agent Login
+          <Link className="text-sm font-semibold text-slate-700 hover:text-navy" href={loginHref}>
+            {loginLabel}
           </Link>
-          <ButtonLink href={cta === "login" ? PUBLIC_ROUTES.login : PUBLIC_ROUTES.signup}>
-            {cta === "login" ? "Agent Login" : "Order Inspection"}
+          <ButtonLink href={cta === "login" ? loginHref : orderHref}>
+            {cta === "login" ? loginLabel : "Order Inspection"}
           </ButtonLink>
         </div>
         <button
@@ -64,9 +75,9 @@ export function PublicHeader({ cta = "order" }: { cta?: "login" | "order" }) {
               </Link>
             ))}
             <div className="mt-3 grid gap-2 border-t border-line pt-4">
-              <ButtonLink href={PUBLIC_ROUTES.signup}>Order Inspection</ButtonLink>
-              <ButtonLink href={PUBLIC_ROUTES.login} variant="secondary">
-                Agent Login
+              <ButtonLink href={orderHref}>Order Inspection</ButtonLink>
+              <ButtonLink href={loginHref} variant="secondary">
+                {loginLabel}
               </ButtonLink>
             </div>
           </nav>

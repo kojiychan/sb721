@@ -27,7 +27,7 @@ export default function SB326Page() {
               applicable California condominium associations and HOAs.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href={PUBLIC_ROUTES.signup}>Order Inspection</ButtonLink>
+              <ButtonLink href={PUBLIC_ROUTES.login}>Order Inspection</ButtonLink>
               <ButtonLink href={PUBLIC_ROUTES.login} variant="secondary">
                 Agent Login
               </ButtonLink>

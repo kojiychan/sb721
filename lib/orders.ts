@@ -37,12 +37,70 @@ export async function getAgentOrder(
   return data;
 }
 
+export async function getOpenInspectorOrders(
+  supabase: Awaited<ReturnType<typeof import("@/lib/supabase").createClientServer>>,
+) {
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .is("inspector_id", null)
+    .is("inspector_name", null)
+    .is("inspector_email", null)
+    .is("inspector_phone", null)
+    .in("status", ACTIVE_STATUSES)
+    .order("created_at", { ascending: false })
+    .returns<Order[]>();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function getInspectorOrders(
+  supabase: Awaited<ReturnType<typeof import("@/lib/supabase").createClientServer>>,
+  inspectorId: string,
+) {
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("inspector_id", inspectorId)
+    .in("status", ACTIVE_STATUSES)
+    .order("inspection_date", { ascending: true, nullsFirst: false })
+    .order("created_at", { ascending: false })
+    .returns<Order[]>();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function getInspectorVisibleOrder(
+  supabase: Awaited<ReturnType<typeof import("@/lib/supabase").createClientServer>>,
+  inspectorId: string,
+  id: string,
+) {
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("id", id)
+    .single<Order>();
+
+  if (
+    error ||
+    !data ||
+    data.status === "Completed" ||
+    data.status === "Cancelled" ||
+    (data.inspector_id && data.inspector_id !== inspectorId)
+  ) {
+    notFound();
+  }
+  return data;
+}
+
 export async function getAdminOrders(
   supabase: Awaited<ReturnType<typeof import("@/lib/supabase").createClientServer>>,
 ) {
   const { data, error } = await supabase
     .from("orders")
-    .select("*, profiles(first_name,last_name,email,company)")
+    .select("*, profiles!orders_agent_id_fkey(first_name,last_name,email,company)")
     .order("created_at", { ascending: false })
     .returns<Order[]>();
 
@@ -56,7 +114,7 @@ export async function getAdminOrder(
 ) {
   const { data, error } = await supabase
     .from("orders")
-    .select("*, profiles(first_name,last_name,email,company)")
+    .select("*, profiles!orders_agent_id_fkey(first_name,last_name,email,company)")
     .eq("id", id)
     .single<Order>();
 

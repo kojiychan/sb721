@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAdmin, requireUser } from "@/lib/auth";
+import { requireAdmin, requireInspector, requireUser } from "@/lib/auth";
 import { isOrderStatus } from "@/lib/statuses";
 import { createServiceClient } from "@/lib/supabase";
 import { formValue, nullableFormValue } from "@/lib/utils";
@@ -236,6 +236,38 @@ export async function uploadReportAction(formData: FormData) {
   revalidatePath("/admin");
   revalidatePath(`/admin/orders/${id}`);
   revalidatePath(`/orders/${id}`);
+}
+
+export async function claimOrderAction(formData: FormData) {
+  const { profile } = await requireInspector();
+  const id = formValue(formData, "id");
+  if (!id) throw new Error("Order is required.");
+
+  const inspectorName = `${profile.first_name} ${profile.last_name}`.trim() || profile.email;
+  const service = createServiceClient();
+  const { data, error } = await service
+    .from("orders")
+    .update({
+      inspector_id: profile.id,
+      inspector_name: inspectorName,
+      inspector_email: profile.email,
+      inspector_phone: profile.phone,
+    })
+    .eq("id", id)
+    .is("inspector_id", null)
+    .is("inspector_name", null)
+    .is("inspector_email", null)
+    .is("inspector_phone", null)
+    .in("status", ["Order Received", "Scheduling", "Scheduled", "Inspection Completed", "Report In Progress", "Report Ready"])
+    .select("id")
+    .single<{ id: string }>();
+
+  if (error || !data) throw new Error("This order is no longer available to claim.");
+
+  revalidatePath("/open-orders");
+  revalidatePath("/my-orders");
+  revalidatePath(`/orders/${id}`);
+  redirect(`/orders/${id}`);
 }
 
 export async function signOutAction() {

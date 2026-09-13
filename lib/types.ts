@@ -7,7 +7,7 @@ export type Profile = {
   email: string;
   phone: string | null;
   company: string | null;
-  role: "agent" | "admin";
+  role: "agent" | "inspector" | "admin";
   created_at: string;
   updated_at: string;
 };
@@ -16,6 +16,7 @@ export type Order = {
   id: string;
   order_number: string;
   agent_id: string;
+  inspector_id: string | null;
   property_address: string;
   city: string;
   state: string;

@@ -6,9 +6,12 @@ import { PublicHeader } from "@/components/public-header";
 export default async function CheckEmailPage({
   searchParams,
 }: {
-  searchParams: Promise<{ email?: string }>;
+  searchParams: Promise<{ email?: string; role?: string }>;
 }) {
-  const { email } = await searchParams;
+  const { email, role } = await searchParams;
+  const isInspector = role === "inspector";
+  const loginHref = isInspector ? "/login?role=inspector" : "/login";
+  const signupHref = isInspector ? "/signup?role=inspector" : "/signup";
 
   return (
     <div className="min-h-screen bg-paper">
@@ -21,10 +24,10 @@ export default async function CheckEmailPage({
           <h1 className="mt-5 text-2xl font-bold text-navy">Check Your Email</h1>
           <p className="mt-3 text-sm leading-6 text-slate-600">
             We sent a confirmation link{email ? ` to ${email}` : ""}. Confirm your email address
-            before logging into your agent portal.
+            before logging into your {isInspector ? "inspector" : "agent"} portal.
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <ButtonLink href="/login">Go to Login</ButtonLink>
+            <ButtonLink href={loginHref}>Go to Login</ButtonLink>
             <ButtonLink href="/" variant="secondary">
               Back to Home
             </ButtonLink>
@@ -35,7 +38,7 @@ export default async function CheckEmailPage({
           </p>
           <p className="mt-3 text-xs text-slate-500">
             Need to use a different email?{" "}
-            <Link className="font-semibold text-brand" href="/signup">
+            <Link className="font-semibold text-brand" href={signupHref}>
               Create another account
             </Link>
           </p>

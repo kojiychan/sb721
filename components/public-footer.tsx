@@ -20,7 +20,7 @@ const footerGroups = [
     title: "Account",
     links: [
       { href: PUBLIC_ROUTES.login, label: "Agent Login" },
-      { href: PUBLIC_ROUTES.signup, label: "Place Order" },
+      { href: PUBLIC_ROUTES.login, label: "Place Order" },
     ],
   },
   {

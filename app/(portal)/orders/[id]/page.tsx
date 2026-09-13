@@ -1,9 +1,11 @@
 import { CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/button";
 import { ProgressTracker } from "@/components/progress-tracker";
 import { ReportCard } from "@/components/report-card";
 import { StatusBadge } from "@/components/status-badge";
+import { claimOrderAction } from "@/lib/actions";
 import { requireUser } from "@/lib/auth";
-import { getAgentOrder } from "@/lib/orders";
+import { getAgentOrder, getInspectorVisibleOrder } from "@/lib/orders";
 import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatOwnerEmail, formatPaymentMadeOn, formatPaymentOption, formatRushDesired, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
 import type { ReactNode } from "react";
 
@@ -16,8 +18,12 @@ export default async function AgentOrderDetailPage({
 }) {
   const { supabase, profile } = await requireUser();
   const [{ id }, query] = await Promise.all([params, searchParams]);
-  const order = await getAgentOrder(supabase, profile.id, id);
+  const order =
+    profile.role === "inspector"
+      ? await getInspectorVisibleOrder(supabase, profile.id, id)
+      : await getAgentOrder(supabase, profile.id, id);
   const paymentMadeOn = formatPaymentMadeOn(order.notes);
+  const canClaim = profile.role === "inspector" && !order.inspector_id;
 
   return (
     <div className="mx-auto max-w-6xl space-y-5">
@@ -32,7 +38,15 @@ export default async function AgentOrderDetailPage({
           <p className="text-sm font-semibold text-slate-500">Order {order.order_number}</p>
           <h1 className="mt-1 text-2xl font-bold text-navy">{fullAddress(order)}</h1>
         </div>
-        <StatusBadge status={order.status} />
+        <div className="flex flex-col gap-2 sm:items-end">
+          <StatusBadge status={order.status} />
+          {canClaim ? (
+            <form action={claimOrderAction}>
+              <input name="id" type="hidden" value={order.id} />
+              <Button>Claim Order</Button>
+            </form>
+          ) : null}
+        </div>
       </div>
       <ProgressTracker status={order.status} />
       <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
