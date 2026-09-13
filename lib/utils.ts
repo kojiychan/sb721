@@ -30,6 +30,18 @@ export function formatOccupancyStatus(value: string) {
   return value === "Occupied" ? "Tenant Occupied" : value;
 }
 
+const saleReportPrefix = "Report needed for property sale: ";
+
+export function formatSaleReportNeeded(notes: string | null | undefined) {
+  const saleLine = notes?.split("\n").find((line) => line.startsWith(saleReportPrefix));
+  return saleLine?.slice(saleReportPrefix.length).replace(/\.$/, "") ?? "—";
+}
+
+export function formatAdditionalNotes(notes: string | null | undefined) {
+  const noteLines = notes?.split("\n").filter((line) => !line.startsWith(saleReportPrefix)) ?? [];
+  return noteLines.join("\n").trim() || "—";
+}
+
 export function formValue(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";

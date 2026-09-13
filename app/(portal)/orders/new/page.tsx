@@ -91,7 +91,17 @@ export default function NewOrderPage() {
         <FormSection title="REAL ESTATE TRANSACTION">
           <Field label="Listing Agent" name="listing_agent" />
           <Field label="Buyer Agent" name="buyer_agent" />
-          <Field label="Escrow Closing Date" name="escrow_closing_date" type="date" />
+          <Field label="Desired Completion Date" name="escrow_closing_date" type="date" />
+          <SelectField
+            className="md:col-start-3"
+            label="Is this report needed for a sale of the property?"
+            name="sale_report_needed"
+            required
+          >
+            <option value="">Select answer</option>
+            <option>Yes</option>
+            <option>No</option>
+          </SelectField>
         </FormSection>
         <FormSection title="ADDITIONAL NOTES">
           <TextareaField className="md:col-span-3" label="Notes" name="notes" />

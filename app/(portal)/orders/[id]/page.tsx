@@ -4,7 +4,7 @@ import { ReportCard } from "@/components/report-card";
 import { StatusBadge } from "@/components/status-badge";
 import { requireUser } from "@/lib/auth";
 import { getAgentOrder } from "@/lib/orders";
-import { formatDate, formatOccupancyStatus, fullAddress } from "@/lib/utils";
+import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
 
 export default async function AgentOrderDetailPage({
   params,
@@ -57,9 +57,10 @@ export default async function AgentOrderDetailPage({
           <DetailSection title="Real Estate Transaction" rows={[
             ["Listing Agent", order.listing_agent ?? "—"],
             ["Buyer Agent", order.buyer_agent ?? "—"],
-            ["Escrow Closing Date", formatDate(order.escrow_closing_date)],
+            ["Desired Completion Date", formatDate(order.escrow_closing_date)],
+            ["Report Needed for Sale", formatSaleReportNeeded(order.notes)],
           ]} />
-          <DetailSection title="Notes" rows={[["Additional Notes", order.notes ?? "—"]]} />
+          <DetailSection title="Notes" rows={[["Additional Notes", formatAdditionalNotes(order.notes)]]} />
         </div>
         <ReportCard hasReport={Boolean(order.report_storage_path)} orderId={order.id} />
       </div>

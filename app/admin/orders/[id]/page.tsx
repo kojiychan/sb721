@@ -7,7 +7,7 @@ import { updateAdminOrderAction, uploadReportAction } from "@/lib/actions";
 import { requireAdmin } from "@/lib/auth";
 import { getAdminOrder } from "@/lib/orders";
 import { ORDER_STATUSES } from "@/lib/statuses";
-import { formatDate, formatOccupancyStatus, fullAddress } from "@/lib/utils";
+import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
 
 export default async function AdminOrderDetailPage({
   params,
@@ -39,12 +39,14 @@ export default async function AdminOrderDetailPage({
                 ["Inspection Type", order.inspection_type],
                 ["Date Ordered", formatDate(order.created_at)],
                 ["Inspection Date", formatDate(order.inspection_date, true)],
+                ["Desired Completion Date", formatDate(order.escrow_closing_date)],
+                ["Report Needed for Sale", formatSaleReportNeeded(order.notes)],
                 ["Units", String(order.number_of_units)],
                 ["Contact", `${order.property_contact_name} | ${order.property_contact_phone}`],
                 ["Occupancy", formatOccupancyStatus(order.occupancy_status)],
                 ["Lockbox Code", order.lockbox_code ?? "—"],
                 ["Access", order.access_instructions ?? "—"],
-                ["Notes", order.notes ?? "—"],
+                ["Notes", formatAdditionalNotes(order.notes)],
               ].map(([label, value]) => (
                 <div key={label}>
                   <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</dt>
