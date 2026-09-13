@@ -64,7 +64,6 @@ export default function NewOrderPage() {
           <Field label="Listing Agent" name="listing_agent" />
           <Field label="Buyer Agent" name="buyer_agent" />
           <Field label="Escrow Closing Date" name="escrow_closing_date" type="date" />
-          <Field label="MLS or Listing URL" name="listing_url" type="url" />
         </FormSection>
         <FormSection title="ADDITIONAL NOTES">
           <TextareaField className="md:col-span-3" label="Notes" name="notes" />

@@ -33,7 +33,6 @@ create table if not exists public.orders (
   listing_agent text,
   buyer_agent text,
   escrow_closing_date date,
-  listing_url text,
   notes text,
   status text not null default 'Order Received' check (
     status in (

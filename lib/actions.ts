@@ -72,7 +72,6 @@ export async function createOrderAction(
       listing_agent: nullableFormValue(formData, "listing_agent") ?? agentName,
       buyer_agent: nullableFormValue(formData, "buyer_agent"),
       escrow_closing_date: nullableFormValue(formData, "escrow_closing_date"),
-      listing_url: nullableFormValue(formData, "listing_url"),
       notes: nullableFormValue(formData, "notes"),
       status: "Order Received",
     })

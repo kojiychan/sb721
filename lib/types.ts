@@ -33,7 +33,6 @@ export type Order = {
   listing_agent: string | null;
   buyer_agent: string | null;
   escrow_closing_date: string | null;
-  listing_url: string | null;
   notes: string | null;
   status: OrderStatus;
   inspection_date: string | null;

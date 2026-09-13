@@ -59,7 +59,6 @@ export default async function AgentOrderDetailPage({
             ["Listing Agent", order.listing_agent ?? "—"],
             ["Buyer Agent", order.buyer_agent ?? "—"],
             ["Escrow Closing Date", formatDate(order.escrow_closing_date)],
-            ["Listing URL", order.listing_url ?? "—"],
           ]} />
           <DetailSection title="Notes" rows={[["Additional Notes", order.notes ?? "—"]]} />
         </div>
