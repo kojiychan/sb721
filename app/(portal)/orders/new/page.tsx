@@ -17,13 +17,6 @@ export default function NewOrderPage() {
         <p className="mt-1 text-sm text-slate-600">Submit one complete request for admin scheduling.</p>
       </div>
       <form action={action} className="space-y-5">
-        <FormSection title="PROPERTY INFORMATION">
-          <Field className="md:col-span-2" label="Property Address" name="property_address" required />
-          <Field label="City" name="city" required />
-          <Field label="State" name="state" required defaultValue="CA" />
-          <Field label="ZIP" name="zip" required />
-          <Field label="Number of Units" min={1} name="number_of_units" required type="number" />
-        </FormSection>
         <FormSection title="INSPECTION INFORMATION">
           <SelectField label="Inspection Type" name="inspection_type" required>
             <option value="">Select type</option>
@@ -38,6 +31,25 @@ export default function NewOrderPage() {
             name="estimated_eee_count"
             type="number"
           />
+        </FormSection>
+        <FormSection title="REPORT TIMING">
+          <Field label="Desired Completion Date" name="escrow_closing_date" type="date" />
+          <SelectField
+            label="Is this report needed for a sale of the property?"
+            name="sale_report_needed"
+            required
+          >
+            <option value="">Select answer</option>
+            <option>Yes</option>
+            <option>No</option>
+          </SelectField>
+        </FormSection>
+        <FormSection title="PROPERTY INFORMATION">
+          <Field className="md:col-span-2" label="Property Address" name="property_address" required />
+          <Field label="City" name="city" required />
+          <Field label="State" name="state" required defaultValue="CA" />
+          <Field label="ZIP" name="zip" required />
+          <Field label="Number of Units" min={1} name="number_of_units" required type="number" />
         </FormSection>
         <FormSection title="PROPERTY CONTACT">
           <Field label="Contact Name" name="property_contact_name" required />
@@ -91,17 +103,6 @@ export default function NewOrderPage() {
         <FormSection title="REAL ESTATE TRANSACTION">
           <Field label="Listing Agent" name="listing_agent" />
           <Field label="Buyer Agent" name="buyer_agent" />
-          <Field label="Desired Completion Date" name="escrow_closing_date" type="date" />
-          <SelectField
-            className="md:col-start-3"
-            label="Is this report needed for a sale of the property?"
-            name="sale_report_needed"
-            required
-          >
-            <option value="">Select answer</option>
-            <option>Yes</option>
-            <option>No</option>
-          </SelectField>
         </FormSection>
         <FormSection title="ADDITIONAL NOTES">
           <TextareaField className="md:col-span-3" label="Notes" name="notes" />
