@@ -56,8 +56,26 @@ export function PortalShell({
                 </Link>
               ) : null}
             </div>
-            <div className="text-sm text-slate-600">
-              {profile.first_name ? `Hi, ${profile.first_name}` : profile.email}
+            <div className="flex items-center gap-2">
+              <div className="hidden text-sm text-slate-600 sm:block">
+                {profile.first_name ? `Hi, ${profile.first_name}` : profile.email}
+              </div>
+              <Link
+                className="inline-flex items-center gap-2 rounded-md border border-line bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                href="/account"
+              >
+                <UserRound className="h-4 w-4" />
+                Account
+              </Link>
+              <form action={signOutAction}>
+                <button
+                  className="inline-flex items-center gap-2 rounded-md border border-line bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                  type="submit"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </button>
+              </form>
             </div>
           </div>
           <nav className="mt-3 flex gap-2 overflow-x-auto lg:hidden">
