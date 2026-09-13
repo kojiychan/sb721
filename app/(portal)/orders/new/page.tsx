@@ -34,9 +34,18 @@ export default function NewOrderPage() {
           />
         </FormSection>
         <FormSection title="REPORT TIMING">
-          <div className="space-y-4 md:col-span-2">
-            <Field className="max-w-sm" label="Desired Completion Date" name="escrow_closing_date" type="date" />
+          <div className="space-y-4 md:col-span-3">
+            <div className="grid gap-4 md:grid-cols-[minmax(0,24rem)_minmax(0,24rem)]">
+              <Field label="Desired Completion Date" name="escrow_closing_date" type="date" />
+              <YesNoToggle
+                label="Is a rush desired?"
+                name="rush_desired"
+                onChange={setRushDesired}
+                value={rushDesired}
+              />
+            </div>
             <SelectField
+              className="max-w-2xl"
               label="Is this report needed for a sale of the property?"
               name="sale_report_needed"
               required
@@ -46,13 +55,6 @@ export default function NewOrderPage() {
               <option>No</option>
             </SelectField>
           </div>
-          <YesNoToggle
-            className="max-w-sm"
-            label="Is a rush desired?"
-            name="rush_desired"
-            onChange={setRushDesired}
-            value={rushDesired}
-          />
         </FormSection>
         <FormSection title="PROPERTY INFORMATION">
           <Field className="md:col-span-2" label="Property Address" name="property_address" required />
@@ -130,28 +132,24 @@ function YesNoToggle({
   name,
   onChange,
   value,
-  className,
 }: {
   label: string;
   name: string;
   onChange: (value: string) => void;
   value: string;
-  className?: string;
 }) {
   return (
-    <fieldset className={`block text-sm font-medium text-slate-700 ${className ?? ""}`}>
+    <fieldset className="block text-sm font-medium text-slate-700">
       <legend>{label}</legend>
-      <div className="mt-1 grid h-10 grid-cols-2 rounded-md border border-line bg-white p-1">
+      <div className="mt-1 flex h-10 items-center gap-8">
         {["Yes", "No"].map((option) => (
           <label
-            className={`flex cursor-pointer items-center justify-center rounded text-sm font-semibold transition ${
-              value === option ? "bg-brand text-white shadow-sm" : "text-slate-600 hover:bg-slate-50"
-            }`}
+            className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-700"
             key={option}
           >
             <input
               checked={value === option}
-              className="sr-only"
+              className="h-4 w-4 border-line text-brand focus:ring-brand"
               name={name}
               onChange={() => onChange(option)}
               required
