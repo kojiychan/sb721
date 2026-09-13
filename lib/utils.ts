@@ -26,6 +26,10 @@ export function fullAddress(order: {
   return `${order.property_address}, ${order.city}, ${order.state} ${order.zip}`;
 }
 
+export function formatOccupancyStatus(value: string) {
+  return value === "Occupied" ? "Tenant Occupied" : value;
+}
+
 export function formValue(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";

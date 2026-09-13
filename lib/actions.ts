@@ -22,6 +22,22 @@ function requireFields(formData: FormData, fields: string[]) {
   return null;
 }
 
+function buildAccessInstructions(formData: FormData) {
+  const needsEeeKey = formValue(formData, "eee_key_required");
+  const accessMethod = formValue(formData, "eee_access_method");
+  const lockboxCode = nullableFormValue(formData, "lockbox_code");
+  const instructions = nullableFormValue(formData, "access_instructions");
+  const accessLines = [`EEE key access needed: ${needsEeeKey}.`];
+
+  if (needsEeeKey === "Yes") {
+    accessLines.push(`Key access method: ${accessMethod}.`);
+    if (accessMethod === "Lock box") accessLines.push(`Lockbox code: ${lockboxCode}.`);
+  }
+
+  if (instructions) accessLines.push(`Access instructions: ${instructions}`);
+  return accessLines.join("\n");
+}
+
 export async function createOrderAction(
   _previousState: ActionState = defaultState,
   formData: FormData,
@@ -40,8 +56,21 @@ export async function createOrderAction(
     "property_contact_phone",
     "property_contact_email",
     "occupancy_status",
+    "eee_key_required",
   ]);
   if (missing) return { ok: false, message: missing };
+
+  const needsEeeKey = formValue(formData, "eee_key_required");
+  const accessMethod = formValue(formData, "eee_access_method");
+  if (!["Yes", "No"].includes(needsEeeKey)) {
+    return { ok: false, message: "Please choose whether key access is needed." };
+  }
+  if (needsEeeKey === "Yes" && !["Realtor to meet inspector", "Lock box"].includes(accessMethod)) {
+    return { ok: false, message: "Please choose the key access method." };
+  }
+  if (needsEeeKey === "Yes" && accessMethod === "Lock box" && !nullableFormValue(formData, "lockbox_code")) {
+    return { ok: false, message: "Please enter the lockbox code. Enter n/a if there is no code." };
+  }
 
   const numberOfUnits = Number.parseInt(formValue(formData, "number_of_units"), 10);
   if (!Number.isFinite(numberOfUnits) || numberOfUnits < 1) {
@@ -67,8 +96,8 @@ export async function createOrderAction(
       property_contact_phone: formValue(formData, "property_contact_phone"),
       property_contact_email: formValue(formData, "property_contact_email"),
       occupancy_status: formValue(formData, "occupancy_status"),
-      lockbox_code: nullableFormValue(formData, "lockbox_code"),
-      access_instructions: nullableFormValue(formData, "access_instructions"),
+      lockbox_code: accessMethod === "Lock box" ? nullableFormValue(formData, "lockbox_code") : null,
+      access_instructions: buildAccessInstructions(formData),
       listing_agent: nullableFormValue(formData, "listing_agent") ?? agentName,
       buyer_agent: nullableFormValue(formData, "buyer_agent"),
       escrow_closing_date: nullableFormValue(formData, "escrow_closing_date"),

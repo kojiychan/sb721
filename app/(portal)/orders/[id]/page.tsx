@@ -4,7 +4,7 @@ import { ReportCard } from "@/components/report-card";
 import { StatusBadge } from "@/components/status-badge";
 import { requireUser } from "@/lib/auth";
 import { getAgentOrder } from "@/lib/orders";
-import { formatDate, fullAddress } from "@/lib/utils";
+import { formatDate, formatOccupancyStatus, fullAddress } from "@/lib/utils";
 
 export default async function AgentOrderDetailPage({
   params,
@@ -51,7 +51,7 @@ export default async function AgentOrderDetailPage({
             ["Email", order.property_contact_email],
           ]} />
           <DetailSection title="Access" rows={[
-            ["Occupancy", order.occupancy_status],
+            ["Occupancy", formatOccupancyStatus(order.occupancy_status)],
             ["Lockbox Code", order.lockbox_code ?? "—"],
             ["Access Instructions", order.access_instructions ?? "—"],
           ]} />
@@ -76,7 +76,7 @@ function DetailSection({ title, rows }: { title: string; rows: [string, string][
         {rows.map(([label, value]) => (
           <div key={label}>
             <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</dt>
-            <dd className="mt-1 break-words text-sm text-slate-700">{value}</dd>
+            <dd className="mt-1 whitespace-pre-line break-words text-sm text-slate-700">{value}</dd>
           </div>
         ))}
       </dl>

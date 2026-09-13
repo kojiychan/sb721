@@ -1,12 +1,14 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { Button } from "@/components/button";
 import { Field, SelectField, TextareaField } from "@/components/form-fields";
 import { createOrderAction } from "@/lib/actions";
 
 export default function NewOrderPage() {
   const [state, action, pending] = useActionState(createOrderAction, { ok: false, message: "" });
+  const [needsEeeKey, setNeedsEeeKey] = useState("");
+  const [accessMethod, setAccessMethod] = useState("");
 
   return (
     <div className="mx-auto max-w-5xl space-y-5">
@@ -53,11 +55,45 @@ export default function NewOrderPage() {
         <FormSection title="ACCESS INFORMATION">
           <SelectField label="Occupancy" name="occupancy_status" required>
             <option value="">Select occupancy</option>
-            <option>Occupied</option>
+            <option value="Occupied">Tenant Occupied</option>
             <option>Vacant</option>
             <option>Unknown</option>
           </SelectField>
-          <Field label="Lockbox Code" name="lockbox_code" />
+          <SelectField
+            label="Do you need a key to access any of the Exterior Elevated Elements?"
+            name="eee_key_required"
+            onChange={(event) => {
+              setNeedsEeeKey(event.target.value);
+              if (event.target.value !== "Yes") setAccessMethod("");
+            }}
+            required
+            value={needsEeeKey}
+          >
+            <option value="">Select answer</option>
+            <option>Yes</option>
+            <option>No</option>
+          </SelectField>
+          {needsEeeKey === "Yes" ? (
+            <SelectField
+              label="Key Access Method"
+              name="eee_access_method"
+              onChange={(event) => setAccessMethod(event.target.value)}
+              required
+              value={accessMethod}
+            >
+              <option value="">Select method</option>
+              <option>Realtor to meet inspector</option>
+              <option>Lock box</option>
+            </SelectField>
+          ) : null}
+          {needsEeeKey === "Yes" && accessMethod === "Lock box" ? (
+            <Field
+              hint="Enter n/a if there is no code."
+              label="Lockbox Code"
+              name="lockbox_code"
+              required
+            />
+          ) : null}
           <TextareaField className="md:col-span-3" label="Access Instructions" name="access_instructions" />
         </FormSection>
         <FormSection title="REAL ESTATE TRANSACTION">
