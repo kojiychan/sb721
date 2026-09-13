@@ -2,7 +2,7 @@ import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes 
 import { cn } from "@/lib/utils";
 
 const fieldClass =
-  "mt-1 h-10 w-full rounded-md border border-line bg-white px-3 text-sm text-navy outline-none transition placeholder:text-slate-400 focus:border-brand focus:ring-2 focus:ring-blue-100";
+  "mt-1 block h-10 w-full rounded-md border border-line bg-white px-3 text-sm text-navy outline-none transition placeholder:text-slate-400 focus:border-brand focus:ring-2 focus:ring-blue-100";
 
 export function Field({
   label,

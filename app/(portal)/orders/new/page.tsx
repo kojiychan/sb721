@@ -73,7 +73,7 @@ export default function NewOrderPage() {
             <option>Unknown</option>
           </SelectField>
           <SelectField
-            className="whitespace-nowrap md:col-span-2"
+            className="md:col-span-2 md:whitespace-nowrap"
             label="Do you need a key to access any of the Exterior Elevated Elements?"
             name="eee_key_required"
             onChange={(event) => {
