@@ -41,7 +41,7 @@ export default function SignupPage() {
         setError(signUpError.message);
         return;
       }
-      router.push("/dashboard");
+      router.push(`/signup/check-email?email=${encodeURIComponent(email)}`);
       router.refresh();
     });
   }
