@@ -4,7 +4,7 @@ import { ProgressTracker } from "@/components/progress-tracker";
 import { ReportCard } from "@/components/report-card";
 import { StatusBadge } from "@/components/status-badge";
 import { updateAdminOrderAction, uploadReportAction } from "@/lib/actions";
-import { requireAdmin } from "@/lib/auth";
+import { getAdminContext } from "@/lib/auth";
 import { getAdminOrder } from "@/lib/orders";
 import { ORDER_STATUSES } from "@/lib/statuses";
 import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatOwnerEmail, formatPaymentMadeOn, formatPaymentOption, formatRushDesired, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
@@ -15,7 +15,9 @@ export default async function AdminOrderDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { supabase } = await requireAdmin();
+  const context = await getAdminContext();
+  if (!context) return null;
+  const { supabase } = context;
   const { id } = await params;
   const order = await getAdminOrder(supabase, id);
   const paymentMadeOn = formatPaymentMadeOn(order.notes);

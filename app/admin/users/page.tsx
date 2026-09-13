@@ -1,8 +1,10 @@
-import { requireAdmin } from "@/lib/auth";
+import { getAdminContext } from "@/lib/auth";
 import type { Profile } from "@/lib/types";
 
 export default async function AdminUsersPage() {
-  const { supabase } = await requireAdmin();
+  const context = await getAdminContext();
+  if (!context) return null;
+  const { supabase } = context;
   const { data: users, error } = await supabase
     .from("profiles")
     .select("*")

@@ -1,9 +1,11 @@
-import { requireAdmin } from "@/lib/auth";
+import { getAdminContext } from "@/lib/auth";
 import { getAdminOrders } from "@/lib/orders";
 import type { Profile } from "@/lib/types";
 
 export default async function AdminInspectorsPage() {
-  const { supabase } = await requireAdmin();
+  const context = await getAdminContext();
+  if (!context) return null;
+  const { supabase } = context;
   const [{ data: inspectors, error }, orders] = await Promise.all([
     supabase
       .from("profiles")

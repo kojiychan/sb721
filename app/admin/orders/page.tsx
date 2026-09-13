@@ -1,5 +1,5 @@
 import { OrdersTable } from "@/components/orders-table";
-import { requireAdmin } from "@/lib/auth";
+import { getAdminContext } from "@/lib/auth";
 import { getAdminOrders } from "@/lib/orders";
 import { ORDER_STATUSES } from "@/lib/statuses";
 
@@ -8,7 +8,9 @@ export default async function AdminOrdersPage({
 }: {
   searchParams: Promise<{ status?: string; q?: string }>;
 }) {
-  const { supabase } = await requireAdmin();
+  const context = await getAdminContext();
+  if (!context) return null;
+  const { supabase } = context;
   const params = await searchParams;
   const q = params.q?.toLowerCase() ?? "";
   const orders = (await getAdminOrders(supabase)).filter((order) => {

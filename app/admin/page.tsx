@@ -1,5 +1,5 @@
 import { OrdersTable } from "@/components/orders-table";
-import { requireAdmin } from "@/lib/auth";
+import { getAdminContext } from "@/lib/auth";
 import { getAdminOrders } from "@/lib/orders";
 import type { Profile } from "@/lib/types";
 
@@ -12,7 +12,9 @@ const summaryStatuses = [
 ];
 
 export default async function AdminDashboardPage() {
-  const { supabase } = await requireAdmin();
+  const context = await getAdminContext();
+  if (!context) return null;
+  const { supabase } = context;
   const [orders, profilesResult] = await Promise.all([
     getAdminOrders(supabase),
     supabase.from("profiles").select("*").returns<Profile[]>(),
