@@ -31,14 +31,23 @@ export function formatOccupancyStatus(value: string) {
 }
 
 const saleReportPrefix = "Report needed for property sale: ";
+const rushDesiredPrefix = "Rush desired: ";
 
 export function formatSaleReportNeeded(notes: string | null | undefined) {
   const saleLine = notes?.split("\n").find((line) => line.startsWith(saleReportPrefix));
   return saleLine?.slice(saleReportPrefix.length).replace(/\.$/, "") ?? "—";
 }
 
+export function formatRushDesired(notes: string | null | undefined) {
+  const rushLine = notes?.split("\n").find((line) => line.startsWith(rushDesiredPrefix));
+  return rushLine?.slice(rushDesiredPrefix.length).replace(/\.$/, "") ?? "—";
+}
+
 export function formatAdditionalNotes(notes: string | null | undefined) {
-  const noteLines = notes?.split("\n").filter((line) => !line.startsWith(saleReportPrefix)) ?? [];
+  const noteLines =
+    notes
+      ?.split("\n")
+      .filter((line) => !line.startsWith(saleReportPrefix) && !line.startsWith(rushDesiredPrefix)) ?? [];
   return noteLines.join("\n").trim() || "—";
 }
 

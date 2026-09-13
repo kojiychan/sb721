@@ -4,7 +4,7 @@ import { ReportCard } from "@/components/report-card";
 import { StatusBadge } from "@/components/status-badge";
 import { requireUser } from "@/lib/auth";
 import { getAgentOrder } from "@/lib/orders";
-import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
+import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatRushDesired, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
 
 export default async function AgentOrderDetailPage({
   params,
@@ -59,6 +59,7 @@ export default async function AgentOrderDetailPage({
             ["Buyer Agent", order.buyer_agent ?? "—"],
             ["Desired Completion Date", formatDate(order.escrow_closing_date)],
             ["Report Needed for Sale", formatSaleReportNeeded(order.notes)],
+            ["Rush Desired", formatRushDesired(order.notes)],
           ]} />
           <DetailSection title="Notes" rows={[["Additional Notes", formatAdditionalNotes(order.notes)]]} />
         </div>

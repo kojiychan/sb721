@@ -9,6 +9,7 @@ export default function NewOrderPage() {
   const [state, action, pending] = useActionState(createOrderAction, { ok: false, message: "" });
   const [needsEeeKey, setNeedsEeeKey] = useState("");
   const [accessMethod, setAccessMethod] = useState("");
+  const [rushDesired, setRushDesired] = useState("");
 
   return (
     <div className="mx-auto max-w-5xl space-y-5">
@@ -33,16 +34,24 @@ export default function NewOrderPage() {
           />
         </FormSection>
         <FormSection title="REPORT TIMING">
-          <Field label="Desired Completion Date" name="escrow_closing_date" type="date" />
-          <SelectField
-            label="Is this report needed for a sale of the property?"
-            name="sale_report_needed"
-            required
-          >
-            <option value="">Select answer</option>
-            <option>Yes</option>
-            <option>No</option>
-          </SelectField>
+          <div className="space-y-4 md:col-span-2">
+            <Field label="Desired Completion Date" name="escrow_closing_date" type="date" />
+            <SelectField
+              label="Is this report needed for a sale of the property?"
+              name="sale_report_needed"
+              required
+            >
+              <option value="">Select answer</option>
+              <option>Yes</option>
+              <option>No</option>
+            </SelectField>
+          </div>
+          <YesNoToggle
+            label="Is a rush desired?"
+            name="rush_desired"
+            onChange={setRushDesired}
+            value={rushDesired}
+          />
         </FormSection>
         <FormSection title="PROPERTY INFORMATION">
           <Field className="md:col-span-2" label="Property Address" name="property_address" required />
@@ -115,6 +124,45 @@ export default function NewOrderPage() {
         </div>
       </form>
     </div>
+  );
+}
+
+function YesNoToggle({
+  label,
+  name,
+  onChange,
+  value,
+}: {
+  label: string;
+  name: string;
+  onChange: (value: string) => void;
+  value: string;
+}) {
+  return (
+    <fieldset className="block text-sm font-medium text-slate-700">
+      <legend>{label}</legend>
+      <div className="mt-1 grid h-10 grid-cols-2 rounded-md border border-line bg-white p-1">
+        {["Yes", "No"].map((option) => (
+          <label
+            className={`flex cursor-pointer items-center justify-center rounded text-sm font-semibold transition ${
+              value === option ? "bg-brand text-white shadow-sm" : "text-slate-600 hover:bg-slate-50"
+            }`}
+            key={option}
+          >
+            <input
+              checked={value === option}
+              className="sr-only"
+              name={name}
+              onChange={() => onChange(option)}
+              required
+              type="radio"
+              value={option}
+            />
+            {option}
+          </label>
+        ))}
+      </div>
+    </fieldset>
   );
 }
 

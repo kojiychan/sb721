@@ -40,8 +40,9 @@ function buildAccessInstructions(formData: FormData) {
 
 function buildOrderNotes(formData: FormData) {
   const saleReportNeeded = formValue(formData, "sale_report_needed");
+  const rushDesired = formValue(formData, "rush_desired");
   const notes = nullableFormValue(formData, "notes");
-  const noteLines = [`Report needed for property sale: ${saleReportNeeded}.`];
+  const noteLines = [`Report needed for property sale: ${saleReportNeeded}.`, `Rush desired: ${rushDesired}.`];
 
   if (notes) noteLines.push(notes);
   return noteLines.join("\n");
@@ -66,17 +67,22 @@ export async function createOrderAction(
     "occupancy_status",
     "eee_key_required",
     "sale_report_needed",
+    "rush_desired",
   ]);
   if (missing) return { ok: false, message: missing };
 
   const needsEeeKey = formValue(formData, "eee_key_required");
   const accessMethod = formValue(formData, "eee_access_method");
   const saleReportNeeded = formValue(formData, "sale_report_needed");
+  const rushDesired = formValue(formData, "rush_desired");
   if (!["Yes", "No"].includes(needsEeeKey)) {
     return { ok: false, message: "Please choose whether key access is needed." };
   }
   if (!["Yes", "No"].includes(saleReportNeeded)) {
     return { ok: false, message: "Please choose whether this report is needed for a sale." };
+  }
+  if (!["Yes", "No"].includes(rushDesired)) {
+    return { ok: false, message: "Please choose whether rush is desired." };
   }
   if (needsEeeKey === "Yes" && !["Realtor to meet inspector", "Lock box"].includes(accessMethod)) {
     return { ok: false, message: "Please choose the key access method." };
