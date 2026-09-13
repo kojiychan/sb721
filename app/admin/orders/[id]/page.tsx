@@ -7,7 +7,7 @@ import { updateAdminOrderAction, uploadReportAction } from "@/lib/actions";
 import { requireAdmin } from "@/lib/auth";
 import { getAdminOrder } from "@/lib/orders";
 import { ORDER_STATUSES } from "@/lib/statuses";
-import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatRushDesired, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
+import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatOwnerEmail, formatPaymentOption, formatRushDesired, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
 
 export default async function AdminOrderDetailPage({
   params,
@@ -42,6 +42,8 @@ export default async function AdminOrderDetailPage({
                 ["Desired Completion Date", formatDate(order.escrow_closing_date)],
                 ["Report Needed for Sale", formatSaleReportNeeded(order.notes)],
                 ["Rush Desired", formatRushDesired(order.notes)],
+                ["Who Will Be Paying", formatPaymentOption(order.notes)],
+                ["Owner Email", formatOwnerEmail(order.notes)],
                 ["Units", String(order.number_of_units)],
                 ["Contact", `${order.property_contact_name} | ${order.property_contact_phone}`],
                 ["Occupancy", formatOccupancyStatus(order.occupancy_status)],

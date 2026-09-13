@@ -32,6 +32,8 @@ export function formatOccupancyStatus(value: string) {
 
 const saleReportPrefix = "Report needed for property sale: ";
 const rushDesiredPrefix = "Rush desired: ";
+const paymentOptionPrefix = "Payment option: ";
+const ownerEmailPrefix = "Owner email: ";
 
 export function formatSaleReportNeeded(notes: string | null | undefined) {
   const saleLine = notes?.split("\n").find((line) => line.startsWith(saleReportPrefix));
@@ -43,11 +45,27 @@ export function formatRushDesired(notes: string | null | undefined) {
   return rushLine?.slice(rushDesiredPrefix.length).replace(/\.$/, "") ?? "—";
 }
 
+export function formatPaymentOption(notes: string | null | undefined) {
+  const paymentLine = notes?.split("\n").find((line) => line.startsWith(paymentOptionPrefix));
+  return paymentLine?.slice(paymentOptionPrefix.length).replace(/\.$/, "") ?? "—";
+}
+
+export function formatOwnerEmail(notes: string | null | undefined) {
+  const ownerLine = notes?.split("\n").find((line) => line.startsWith(ownerEmailPrefix));
+  return ownerLine?.slice(ownerEmailPrefix.length).replace(/\.$/, "") ?? "—";
+}
+
 export function formatAdditionalNotes(notes: string | null | undefined) {
   const noteLines =
     notes
       ?.split("\n")
-      .filter((line) => !line.startsWith(saleReportPrefix) && !line.startsWith(rushDesiredPrefix)) ?? [];
+      .filter(
+        (line) =>
+          !line.startsWith(saleReportPrefix) &&
+          !line.startsWith(rushDesiredPrefix) &&
+          !line.startsWith(paymentOptionPrefix) &&
+          !line.startsWith(ownerEmailPrefix),
+      ) ?? [];
   return noteLines.join("\n").trim() || "—";
 }
 

@@ -10,6 +10,8 @@ export default function NewOrderPage() {
   const [needsEeeKey, setNeedsEeeKey] = useState("");
   const [accessMethod, setAccessMethod] = useState("");
   const [rushDesired, setRushDesired] = useState("");
+  const [paymentOption, setPaymentOption] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
 
   return (
     <div className="mx-auto max-w-5xl space-y-5">
@@ -37,10 +39,11 @@ export default function NewOrderPage() {
           <div className="space-y-4 md:col-span-3">
             <div className="grid gap-4 md:grid-cols-[minmax(0,24rem)_minmax(0,24rem)]">
               <Field label="Desired Completion Date" name="escrow_closing_date" type="date" />
-              <YesNoToggle
+              <RadioGroup
                 label="Is a rush desired?"
                 name="rush_desired"
                 onChange={setRushDesired}
+                options={["Yes", "No"]}
                 value={rushDesired}
               />
             </div>
@@ -65,7 +68,18 @@ export default function NewOrderPage() {
         </FormSection>
         <FormSection title="PROPERTY CONTACT">
           <Field label="Contact Name" name="property_contact_name" required />
-          <Field label="Phone" name="property_contact_phone" required />
+          <Field
+            inputMode="tel"
+            label="Phone"
+            name="property_contact_phone"
+            onChange={(event) => setContactPhone(formatPhoneInput(event.target.value))}
+            pattern="\(\d{3}\)\d{3}-\d{4}"
+            placeholder="(555)123-4567"
+            required
+            title="Enter a 10-digit phone number."
+            type="tel"
+            value={contactPhone}
+          />
           <Field label="Email" name="property_contact_email" required type="email" />
         </FormSection>
         <FormSection title="ACCESS INFORMATION">
@@ -113,6 +127,26 @@ export default function NewOrderPage() {
           ) : null}
           <TextareaField className="md:col-span-3" label="Access Instructions" name="access_instructions" />
         </FormSection>
+        <FormSection title="PAYMENT OPTIONS">
+          <div className="md:col-span-3">
+            <RadioGroup
+              label="Who will be paying?"
+              name="payment_option"
+              onChange={setPaymentOption}
+              options={["Pay now", "Owner will pay"]}
+              value={paymentOption}
+            />
+          </div>
+          {paymentOption === "Owner will pay" ? (
+            <Field
+              className="md:col-span-2"
+              label="Owner Email"
+              name="owner_email"
+              required
+              type="email"
+            />
+          ) : null}
+        </FormSection>
         <FormSection title="ADDITIONAL NOTES">
           <TextareaField className="md:col-span-3" label="Notes" name="notes" />
         </FormSection>
@@ -127,22 +161,31 @@ export default function NewOrderPage() {
   );
 }
 
-function YesNoToggle({
+function formatPhoneInput(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `(${digits.slice(0, 3)})${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)})${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
+function RadioGroup({
   label,
   name,
   onChange,
+  options,
   value,
 }: {
   label: string;
   name: string;
   onChange: (value: string) => void;
+  options: string[];
   value: string;
 }) {
   return (
     <fieldset className="block text-sm font-medium text-slate-700">
       <legend>{label}</legend>
       <div className="mt-1 flex h-10 items-center gap-8">
-        {["Yes", "No"].map((option) => (
+        {options.map((option) => (
           <label
             className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-700"
             key={option}

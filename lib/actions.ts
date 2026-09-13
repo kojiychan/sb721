@@ -22,6 +22,19 @@ function requireFields(formData: FormData, fields: string[]) {
   return null;
 }
 
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function phoneDigits(value: string) {
+  return value.replace(/\D/g, "");
+}
+
+function formatPhoneNumber(value: string) {
+  const digits = phoneDigits(value);
+  return `(${digits.slice(0, 3)})${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+}
+
 function buildAccessInstructions(formData: FormData) {
   const needsEeeKey = formValue(formData, "eee_key_required");
   const accessMethod = formValue(formData, "eee_access_method");
@@ -41,9 +54,16 @@ function buildAccessInstructions(formData: FormData) {
 function buildOrderNotes(formData: FormData) {
   const saleReportNeeded = formValue(formData, "sale_report_needed");
   const rushDesired = formValue(formData, "rush_desired");
+  const paymentOption = formValue(formData, "payment_option");
+  const ownerEmail = nullableFormValue(formData, "owner_email");
   const notes = nullableFormValue(formData, "notes");
-  const noteLines = [`Report needed for property sale: ${saleReportNeeded}.`, `Rush desired: ${rushDesired}.`];
+  const noteLines = [
+    `Report needed for property sale: ${saleReportNeeded}.`,
+    `Rush desired: ${rushDesired}.`,
+    `Payment option: ${paymentOption}.`,
+  ];
 
+  if (ownerEmail) noteLines.push(`Owner email: ${ownerEmail}.`);
   if (notes) noteLines.push(notes);
   return noteLines.join("\n");
 }
@@ -68,6 +88,7 @@ export async function createOrderAction(
     "eee_key_required",
     "sale_report_needed",
     "rush_desired",
+    "payment_option",
   ]);
   if (missing) return { ok: false, message: missing };
 
@@ -75,6 +96,10 @@ export async function createOrderAction(
   const accessMethod = formValue(formData, "eee_access_method");
   const saleReportNeeded = formValue(formData, "sale_report_needed");
   const rushDesired = formValue(formData, "rush_desired");
+  const paymentOption = formValue(formData, "payment_option");
+  const contactPhone = formValue(formData, "property_contact_phone");
+  const contactEmail = formValue(formData, "property_contact_email");
+  const ownerEmail = formValue(formData, "owner_email");
   if (!["Yes", "No"].includes(needsEeeKey)) {
     return { ok: false, message: "Please choose whether key access is needed." };
   }
@@ -83,6 +108,18 @@ export async function createOrderAction(
   }
   if (!["Yes", "No"].includes(rushDesired)) {
     return { ok: false, message: "Please choose whether rush is desired." };
+  }
+  if (!["Pay now", "Owner will pay"].includes(paymentOption)) {
+    return { ok: false, message: "Please choose who will be paying." };
+  }
+  if (phoneDigits(contactPhone).length !== 10) {
+    return { ok: false, message: "Point of contact phone must contain exactly 10 digits." };
+  }
+  if (!isValidEmail(contactEmail)) {
+    return { ok: false, message: "Point of contact email must be a valid email address." };
+  }
+  if (paymentOption === "Owner will pay" && !isValidEmail(ownerEmail)) {
+    return { ok: false, message: "Owner email must be a valid email address." };
   }
   if (needsEeeKey === "Yes" && !["Realtor to meet inspector", "Lock box"].includes(accessMethod)) {
     return { ok: false, message: "Please choose the key access method." };
@@ -110,8 +147,8 @@ export async function createOrderAction(
       inspection_type: formValue(formData, "inspection_type"),
       estimated_eee_count: estimatedCount ? Number.parseInt(estimatedCount, 10) : null,
       property_contact_name: formValue(formData, "property_contact_name"),
-      property_contact_phone: formValue(formData, "property_contact_phone"),
-      property_contact_email: formValue(formData, "property_contact_email"),
+      property_contact_phone: formatPhoneNumber(contactPhone),
+      property_contact_email: contactEmail,
       occupancy_status: formValue(formData, "occupancy_status"),
       lockbox_code: accessMethod === "Lock box" ? nullableFormValue(formData, "lockbox_code") : null,
       access_instructions: buildAccessInstructions(formData),
