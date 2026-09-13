@@ -38,7 +38,6 @@ export default async function AgentOrderDetailPage({
           <DetailSection title="Property Information" rows={[
             ["Address", fullAddress(order)],
             ["Number of Units", String(order.number_of_units)],
-            ["Property Type", order.property_type],
           ]} />
           <DetailSection title="Inspection" rows={[
             ["Inspection Type", order.inspection_type],

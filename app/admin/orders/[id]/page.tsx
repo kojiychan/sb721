@@ -40,7 +40,6 @@ export default async function AdminOrderDetailPage({
                 ["Date Ordered", formatDate(order.created_at)],
                 ["Inspection Date", formatDate(order.inspection_date, true)],
                 ["Units", String(order.number_of_units)],
-                ["Property Type", order.property_type],
                 ["Contact", `${order.property_contact_name} | ${order.property_contact_phone}`],
                 ["Occupancy", formatOccupancyStatus(order.occupancy_status)],
                 ["Lockbox Code", order.lockbox_code ?? "—"],

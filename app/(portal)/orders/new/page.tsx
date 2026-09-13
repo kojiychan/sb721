@@ -23,14 +23,6 @@ export default function NewOrderPage() {
           <Field label="State" name="state" required defaultValue="CA" />
           <Field label="ZIP" name="zip" required />
           <Field label="Number of Units" min={1} name="number_of_units" required type="number" />
-          <SelectField label="Property Type" name="property_type" required>
-            <option value="">Select type</option>
-            <option>Multifamily</option>
-            <option>Condominium / HOA</option>
-            <option>Apartment</option>
-            <option>Mixed Use</option>
-            <option>Other</option>
-          </SelectField>
         </FormSection>
         <FormSection title="INSPECTION INFORMATION">
           <SelectField label="Inspection Type" name="inspection_type" required>
