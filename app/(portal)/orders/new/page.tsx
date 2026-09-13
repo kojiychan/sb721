@@ -110,10 +110,6 @@ export default function NewOrderPage() {
           ) : null}
           <TextareaField className="md:col-span-3" label="Access Instructions" name="access_instructions" />
         </FormSection>
-        <FormSection title="REAL ESTATE TRANSACTION">
-          <Field label="Listing Agent" name="listing_agent" />
-          <Field label="Buyer Agent" name="buyer_agent" />
-        </FormSection>
         <FormSection title="ADDITIONAL NOTES">
           <TextareaField className="md:col-span-3" label="Notes" name="notes" />
         </FormSection>

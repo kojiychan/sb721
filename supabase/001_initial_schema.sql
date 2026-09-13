@@ -30,8 +30,6 @@ create table if not exists public.orders (
   occupancy_status text not null check (occupancy_status in ('Occupied', 'Vacant', 'Unknown')),
   lockbox_code text,
   access_instructions text,
-  listing_agent text,
-  buyer_agent text,
   escrow_closing_date date,
   notes text,
   status text not null default 'Order Received' check (

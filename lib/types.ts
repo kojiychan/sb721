@@ -30,8 +30,6 @@ export type Order = {
   occupancy_status: string;
   lockbox_code: string | null;
   access_instructions: string | null;
-  listing_agent: string | null;
-  buyer_agent: string | null;
   escrow_closing_date: string | null;
   notes: string | null;
   status: OrderStatus;

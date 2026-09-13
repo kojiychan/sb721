@@ -54,9 +54,7 @@ export default async function AgentOrderDetailPage({
             ["Lockbox Code", order.lockbox_code ?? "—"],
             ["Access Instructions", order.access_instructions ?? "—"],
           ]} />
-          <DetailSection title="Real Estate Transaction" rows={[
-            ["Listing Agent", order.listing_agent ?? "—"],
-            ["Buyer Agent", order.buyer_agent ?? "—"],
+          <DetailSection title="Report Timing" rows={[
             ["Desired Completion Date", formatDate(order.escrow_closing_date)],
             ["Report Needed for Sale", formatSaleReportNeeded(order.notes)],
             ["Rush Desired", formatRushDesired(order.notes)],

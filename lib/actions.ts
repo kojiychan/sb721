@@ -97,8 +97,6 @@ export async function createOrderAction(
   }
 
   const estimatedCount = nullableFormValue(formData, "estimated_eee_count");
-  const agentName = `${profile.first_name} ${profile.last_name}`.trim();
-
   const { data, error } = await supabase
     .from("orders")
     .insert({
@@ -117,8 +115,6 @@ export async function createOrderAction(
       occupancy_status: formValue(formData, "occupancy_status"),
       lockbox_code: accessMethod === "Lock box" ? nullableFormValue(formData, "lockbox_code") : null,
       access_instructions: buildAccessInstructions(formData),
-      listing_agent: nullableFormValue(formData, "listing_agent") ?? agentName,
-      buyer_agent: nullableFormValue(formData, "buyer_agent"),
       escrow_closing_date: nullableFormValue(formData, "escrow_closing_date"),
       notes: buildOrderNotes(formData),
       status: "Order Received",
