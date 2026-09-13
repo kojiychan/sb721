@@ -4,7 +4,8 @@ import { ReportCard } from "@/components/report-card";
 import { StatusBadge } from "@/components/status-badge";
 import { requireUser } from "@/lib/auth";
 import { getAgentOrder } from "@/lib/orders";
-import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatOwnerEmail, formatPaymentOption, formatRushDesired, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
+import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatOwnerEmail, formatPaymentMadeOn, formatPaymentOption, formatRushDesired, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
+import type { ReactNode } from "react";
 
 export default async function AgentOrderDetailPage({
   params,
@@ -16,6 +17,7 @@ export default async function AgentOrderDetailPage({
   const { supabase, profile } = await requireUser();
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const order = await getAgentOrder(supabase, profile.id, id);
+  const paymentMadeOn = formatPaymentMadeOn(order.notes);
 
   return (
     <div className="mx-auto max-w-6xl space-y-5">
@@ -62,6 +64,7 @@ export default async function AgentOrderDetailPage({
           <DetailSection title="Payment" rows={[
             ["Who Will Be Paying", formatPaymentOption(order.notes)],
             ["Owner Email", formatOwnerEmail(order.notes)],
+            ["Payment Made On", paymentMadeOn ?? <span className="font-semibold text-red-700">Payment due</span>],
           ]} />
           <DetailSection title="Notes" rows={[["Additional Notes", formatAdditionalNotes(order.notes)]]} />
         </div>
@@ -71,7 +74,7 @@ export default async function AgentOrderDetailPage({
   );
 }
 
-function DetailSection({ title, rows }: { title: string; rows: [string, string][] }) {
+function DetailSection({ title, rows }: { title: string; rows: [string, ReactNode][] }) {
   return (
     <section className="rounded-lg border border-line bg-white p-5 shadow-soft">
       <h2 className="text-base font-semibold text-navy">{title}</h2>

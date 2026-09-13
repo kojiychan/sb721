@@ -7,7 +7,8 @@ import { updateAdminOrderAction, uploadReportAction } from "@/lib/actions";
 import { requireAdmin } from "@/lib/auth";
 import { getAdminOrder } from "@/lib/orders";
 import { ORDER_STATUSES } from "@/lib/statuses";
-import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatOwnerEmail, formatPaymentOption, formatRushDesired, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
+import { formatAdditionalNotes, formatDate, formatOccupancyStatus, formatOwnerEmail, formatPaymentMadeOn, formatPaymentOption, formatRushDesired, formatSaleReportNeeded, fullAddress } from "@/lib/utils";
+import type { ReactNode } from "react";
 
 export default async function AdminOrderDetailPage({
   params,
@@ -17,6 +18,26 @@ export default async function AdminOrderDetailPage({
   const { supabase } = await requireAdmin();
   const { id } = await params;
   const order = await getAdminOrder(supabase, id);
+  const paymentMadeOn = formatPaymentMadeOn(order.notes);
+  const orderRows: [string, ReactNode][] = [
+    ["Agent", order.profiles ? `${order.profiles.first_name} ${order.profiles.last_name}` : "—"],
+    ["Agent Email", order.profiles?.email ?? "—"],
+    ["Inspection Type", order.inspection_type],
+    ["Date Ordered", formatDate(order.created_at)],
+    ["Inspection Date", formatDate(order.inspection_date, true)],
+    ["Desired Completion Date", formatDate(order.escrow_closing_date)],
+    ["Report Needed for Sale", formatSaleReportNeeded(order.notes)],
+    ["Rush Desired", formatRushDesired(order.notes)],
+    ["Who Will Be Paying", formatPaymentOption(order.notes)],
+    ["Owner Email", formatOwnerEmail(order.notes)],
+    ["Payment Made On", paymentMadeOn ?? <span className="font-semibold text-red-700">Payment due</span>],
+    ["Units", String(order.number_of_units)],
+    ["Contact", `${order.property_contact_name} | ${order.property_contact_phone}`],
+    ["Occupancy", formatOccupancyStatus(order.occupancy_status)],
+    ["Lockbox Code", order.lockbox_code ?? "—"],
+    ["Access", order.access_instructions ?? "—"],
+    ["Notes", formatAdditionalNotes(order.notes)],
+  ];
 
   return (
     <div className="mx-auto max-w-6xl space-y-5">
@@ -33,24 +54,7 @@ export default async function AdminOrderDetailPage({
           <section className="rounded-lg border border-line bg-white p-5 shadow-soft">
             <h2 className="text-base font-semibold text-navy">Order Details</h2>
             <dl className="mt-4 grid gap-3 sm:grid-cols-2">
-              {[
-                ["Agent", order.profiles ? `${order.profiles.first_name} ${order.profiles.last_name}` : "—"],
-                ["Agent Email", order.profiles?.email ?? "—"],
-                ["Inspection Type", order.inspection_type],
-                ["Date Ordered", formatDate(order.created_at)],
-                ["Inspection Date", formatDate(order.inspection_date, true)],
-                ["Desired Completion Date", formatDate(order.escrow_closing_date)],
-                ["Report Needed for Sale", formatSaleReportNeeded(order.notes)],
-                ["Rush Desired", formatRushDesired(order.notes)],
-                ["Who Will Be Paying", formatPaymentOption(order.notes)],
-                ["Owner Email", formatOwnerEmail(order.notes)],
-                ["Units", String(order.number_of_units)],
-                ["Contact", `${order.property_contact_name} | ${order.property_contact_phone}`],
-                ["Occupancy", formatOccupancyStatus(order.occupancy_status)],
-                ["Lockbox Code", order.lockbox_code ?? "—"],
-                ["Access", order.access_instructions ?? "—"],
-                ["Notes", formatAdditionalNotes(order.notes)],
-              ].map(([label, value]) => (
+              {orderRows.map(([label, value]) => (
                 <div key={label}>
                   <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</dt>
                   <dd className="mt-1 whitespace-pre-line break-words text-sm text-slate-700">{value}</dd>

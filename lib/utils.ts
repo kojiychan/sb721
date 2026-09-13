@@ -34,6 +34,7 @@ const saleReportPrefix = "Report needed for property sale: ";
 const rushDesiredPrefix = "Rush desired: ";
 const paymentOptionPrefix = "Payment option: ";
 const ownerEmailPrefix = "Owner email: ";
+const paymentMadeOnPrefix = "Payment made on: ";
 
 export function formatSaleReportNeeded(notes: string | null | undefined) {
   const saleLine = notes?.split("\n").find((line) => line.startsWith(saleReportPrefix));
@@ -55,6 +56,12 @@ export function formatOwnerEmail(notes: string | null | undefined) {
   return ownerLine?.slice(ownerEmailPrefix.length).replace(/\.$/, "") ?? "—";
 }
 
+export function formatPaymentMadeOn(notes: string | null | undefined) {
+  const paymentLine = notes?.split("\n").find((line) => line.startsWith(paymentMadeOnPrefix));
+  const paymentDate = paymentLine?.slice(paymentMadeOnPrefix.length).replace(/\.$/, "");
+  return paymentDate ? formatDate(paymentDate) : null;
+}
+
 export function formatAdditionalNotes(notes: string | null | undefined) {
   const noteLines =
     notes
@@ -64,7 +71,8 @@ export function formatAdditionalNotes(notes: string | null | undefined) {
           !line.startsWith(saleReportPrefix) &&
           !line.startsWith(rushDesiredPrefix) &&
           !line.startsWith(paymentOptionPrefix) &&
-          !line.startsWith(ownerEmailPrefix),
+          !line.startsWith(ownerEmailPrefix) &&
+          !line.startsWith(paymentMadeOnPrefix),
       ) ?? [];
   return noteLines.join("\n").trim() || "—";
 }
