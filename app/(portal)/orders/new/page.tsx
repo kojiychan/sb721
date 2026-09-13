@@ -35,7 +35,7 @@ export default function NewOrderPage() {
         </FormSection>
         <FormSection title="REPORT TIMING">
           <div className="space-y-4 md:col-span-2">
-            <Field label="Desired Completion Date" name="escrow_closing_date" type="date" />
+            <Field className="max-w-sm" label="Desired Completion Date" name="escrow_closing_date" type="date" />
             <SelectField
               label="Is this report needed for a sale of the property?"
               name="sale_report_needed"
@@ -47,6 +47,7 @@ export default function NewOrderPage() {
             </SelectField>
           </div>
           <YesNoToggle
+            className="max-w-sm"
             label="Is a rush desired?"
             name="rush_desired"
             onChange={setRushDesired}
@@ -129,14 +130,16 @@ function YesNoToggle({
   name,
   onChange,
   value,
+  className,
 }: {
   label: string;
   name: string;
   onChange: (value: string) => void;
   value: string;
+  className?: string;
 }) {
   return (
-    <fieldset className="block text-sm font-medium text-slate-700">
+    <fieldset className={`block text-sm font-medium text-slate-700 ${className ?? ""}`}>
       <legend>{label}</legend>
       <div className="mt-1 grid h-10 grid-cols-2 rounded-md border border-line bg-white p-1">
         {["Yes", "No"].map((option) => (
